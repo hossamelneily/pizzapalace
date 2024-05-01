@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .models import MenuItem, Category, MenuItemCategory
 from .serializers import MenuItemSerializer, CategorySerializer, MenuItemCategorySerializer
+from django.contrib.admin.views.decorators import user_passes_test
 
 
 class MenuItemListCreateAPIView(generics.ListCreateAPIView):
@@ -37,3 +38,13 @@ class MenuItemCategoryRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestro
     """ Retrieve, update, and delete a specific item-category association """
     queryset = MenuItemCategory.objects.all()
     serializer_class = MenuItemCategorySerializer
+
+
+def admin_required(function):
+    """ Decorator for views that checks if the user is an admin """
+    actual_decorator = user_passes_test(
+        lambda user: user.is_superuser,
+        login_url='/admin/login/',
+        redirect_field_name=None
+    )
+    return actual_decorator(function)
