@@ -1,6 +1,6 @@
 import time
 import logging
-from celery import shared_task,task
+from celery import shared_task
 
 from Orders.models import OrderItem
 
@@ -37,9 +37,3 @@ def add_toppings(pizza_name, order_id):
 def bake_pizza(pizza_name, order_id):
     logger.debug(f"Baking pizza for pizza {pizza_name} for order #{order_id}")
     time.sleep(5)  # Simulate baking time
-
-
-
-@task
-def test():
-    logger.info("test")
